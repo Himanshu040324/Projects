@@ -1,0 +1,232 @@
+// Project 1: GPA and CGPA Calculator
+
+#include <bits/stdc++.h>
+using namespace std;
+
+void printLine()
+{
+    cout << " X";
+    for(int i = 0; i < 100; i++)
+        cout << "-";
+    
+    cout << "X \n";
+}
+
+int GpaCalculator()
+{
+    // Introduction
+    gpaAgain:
+        system("cls");
+        printLine();
+        cout << "\t\t\t\t\tGPA Calculator\n";
+        printLine();
+
+    // input
+    cout << "\n\tPlease enter the number of Subject's : ";
+    int subject;
+    cin >> subject;
+
+    float credit[20] = {0};
+    float point, sum, totalCre, totalPt;
+    sum = totalCre = totalPt = 0;
+
+    for(int i = 1; i <= subject; i++)
+    {
+        cout << "\n\t\tEnter the Credits for subject " << i << " : ";
+        cin >> credit[i];
+
+        cout << "\n\t\tEnter the Points for subject " << i << " : ";
+        cin >> point;
+        printLine();
+
+        totalCre += credit[i];
+        totalPt += point;
+        credit[i] *= point;
+        sum += credit[i];
+    }
+
+    float gpa = sum / totalCre;
+
+    // output
+    cout << "\n\t\tTotal Credits: " << totalCre << " .";
+    cout << "\n\t\tTotal Points: " << sum << " .";
+    cout << "\n\t\tTotal GPA: " << gpa << " .\n";
+    printLine();
+
+    // redirecting forward
+    cout << "\n\t\tOption: ";
+    cout << "\n\t\t\t1. Calculate Again.\n\t\t\t2. Go Back to Main Menu.\n\t\t\t3. Exit this App.\n";
+    printLine();
+    
+    invalidOption:
+        cout << "\t\tEnter you choice: ";
+        int redirectChoice;
+        cin >> redirectChoice;
+
+    switch(redirectChoice)
+    {
+        case 1:
+            goto gpaAgain;
+            break;
+        
+        case 2:
+            goto ExitMenu;
+            break;
+        
+        case 3: 
+            goto ExitApp;
+            break;
+        
+        default:
+            cout << "\n\t\tYou have entered an Invalid option.\n";
+            cout << "\t\tPlease choose a valid option.\n\n";
+            goto invalidOption;
+            break;
+    }
+
+    ExitMenu:
+        return 0;
+    
+    ExitApp:
+        return 1;
+
+}
+
+int CgpaCalculator()
+{
+    // Introduction
+    cgpaAgain:
+        system("cls");
+        printLine();
+        cout << "\t\t\t\t\tCGPA Calculator\n";
+        printLine();
+
+    // input
+    cout << "\n\tPlease enter the number of Semesters : ";
+    int semCount;
+    cin >> semCount;
+
+    float semRes;
+    float sum = 0;
+
+    for(int i = 1; i <= semCount; i++)
+    {
+        cout << "\n\t\tEnter the GPA for Semester: " << i << " : ";
+        cin >> semRes;
+
+        sum += semRes;
+    }
+
+    sum /= semCount;
+
+    // output
+    cout << "\n\t\tYour Total CGPA: " << sum << " .\n";
+    printLine();
+
+    // redirecting forward
+    cout << "\n\t\tOption: ";
+    cout << "\n\t\t\t1. Calculate Again.\n\t\t\t2. Go Back to Main Menu.\n\t\t\t3. Exit this App.\n";
+    printLine();
+    
+    invalidOption:
+        cout << "\t\tEnter you choice: ";
+        int redirectChoice;
+        cin >> redirectChoice;
+
+    switch(redirectChoice)
+    {
+        case 1:
+            goto cgpaAgain;
+            break;
+        
+        case 2:
+            goto ExitMenu;
+            break;
+        
+        case 3: 
+            goto ExitApp;
+            break;
+        
+        default:
+            cout << "\n\t\tYou have entered an Invalid option.\n";
+            cout << "\t\tPlease choose a valid option.\n\n";
+            goto invalidOption;
+            break;
+    }
+
+    ExitMenu:
+        return 0;
+    
+    ExitApp:
+        return 1;
+}
+
+int main()
+{
+    cout << endl;
+    // start
+
+    // Welome
+    menu:
+        printLine();
+        cout << "\t\t\t\t\tWelcome to GPA/CGPA calculator\n";
+        printLine();
+
+    // Menu Served
+    cout << "\n\t\tMenu: \n";
+    cout << "\t\t\t1. GPA Calculator\n\t\t\t2. CGPA Calculator\n\t\t\t3. Exit\n";
+    printLine();
+
+    // Menu input taken and directed forward
+    int menuOption;
+    int wayToDirect;
+
+    invalidOption:
+        cout << "\t\tEnter your choice: ";
+        cin >> menuOption;
+
+        switch (menuOption)
+        {
+        case 1:
+            wayToDirect = GpaCalculator();
+
+            if(wayToDirect == 0)
+            {
+                system("cls");
+                goto menu;
+            }
+
+            else
+                goto Exit;
+
+            break;
+        
+        case 2:
+            wayToDirect = CgpaCalculator();
+
+            if(wayToDirect == 0)
+            {
+                system("cls");
+                goto menu;
+            }
+
+            else
+                goto Exit;
+
+            break;
+        
+        case 3:
+            goto Exit;
+            break;
+  
+        default:
+            cout << "\n\t\tYou have entered an Invalid option.\n";
+            cout << "\t\tPlease choose a valid option.\n\n";
+            goto invalidOption;
+            break;
+        }
+
+    Exit:
+    // end
+    cout << endl;
+}
