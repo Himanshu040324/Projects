@@ -1,0 +1,114 @@
+// Project 3: Casino Number Guessing Game
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+void printLine()
+{
+    cout << "X";
+    for (int i = 0; i < 101; i++)
+        cout << "-";
+    cout << "X" << endl;
+}
+
+int main()
+{
+    cout << endl;
+    // start
+
+    // Introduction
+    while(1)
+    {
+        printLine();
+        cout << "\t\t\t\tWelcome to Casino Number Guessing Game\n";
+        printLine();
+
+        // Selecting Options
+        cout << "\n\t\tSelect the difficulty: 1 for Easy, 2 for Medium, 3 for Difficult, 0 for Exit\n\n";
+
+        // Option Input
+        int n, trials, input;
+    
+        while(1)
+        {
+            cout << "Select Your Option: ";
+            cin >> n;
+
+            if (n == 1)
+            {
+                trials = 10;
+                break;
+            }
+            else if (n == 2)
+            {
+                trials = 8;
+                break;
+            }
+            else if (n == 3)
+            {
+                trials = 5;
+                break;
+            }
+            else if (n == 0)
+            {
+                exit(EXIT_SUCCESS);
+                break;
+            }
+            else
+                cout << "You have choosen invalid Option...\n\n";
+        }
+
+        // Selecting Number
+        srand(time(0));
+        int num = 1 + (rand() % 100);
+
+        cout << "You have got " << trials << " attempts to guess the number. All the best !!\n\n";
+
+        // Getting Input
+        while (trials > 0)
+        {
+            cout << "Enter your number: ";
+            cin >> input;
+            trials--;
+
+            if (input == n)
+            {
+                cout << "Well Done, " << input << " is the Secret Number...\nYou Won the Game...\n\n";
+                break;
+            }
+            else
+            {
+                cout << "No, " << input << " is not the Secret Number...\n";
+                
+                if(input < n)
+                {
+                    cout << "Hint: Secret Number is Greater than " << input << " ...\n";
+                    cout << "You have " << trials << " attempts left...\n\n";
+                }
+                else
+                {
+                    cout << "Hint: Secret Number is Less than " << input << " ...\n";
+                    cout << "You have " << trials << " attempts left...\n\n";
+                }
+            }
+        }
+
+        if(trials == 0)
+            cout << "Oh !!, You have lose the Game...\n\n";
+        
+        cout << "Options: 1 for Exit, 2 for Play Again\n";
+        cout << "Select Your Option: ";
+        cin >> n;
+
+        if(n == 1)
+            break;
+
+        printLine();
+        system("cls");
+    }
+
+    // end
+    cout << endl;
+    return 0;
+}
