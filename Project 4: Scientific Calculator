@@ -1,0 +1,154 @@
+// Project 4: Scientific Calculator
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+void printLine()
+{
+    cout << " X";
+    for(int i = 0; i < 100; i++)
+        cout << "-";
+    
+    cout << "X \n";
+}
+
+void input(float &a, float &b, int n)
+{
+    cout << "\t\tEnter input1: ";
+        cin >> a;
+
+    if(n == 2)
+    {
+        cout << "\t\tEnter input2: ";
+        cin >> b;
+    }
+}
+
+int main()
+{
+    cout << endl;
+    // start
+
+    // Welome
+    menu:
+        printLine();
+        cout << "\t\t\t\t\tWelcome to Scientific calculator\n";
+        printLine();
+
+    // Menu Served
+    cout << "\n\t\tMenu: \n";
+    cout << "\t\t\t0. Exit\n\t\t\t1. Addition\n\t\t\t2. Subtraction\n\t\t\t3. Multiplication\n\t\t\t4. Division
+              \n\t\t\t5. Square root\n\t\t\t6. Exponential\n\t\t\t7. Logarithmic (base 10)\n\t\t\t8. Sine\n\t\t\t9. Cosine\n\t\t\t10. Tangent\n";
+    printLine();
+
+    // input choice
+    invalidOption:
+        cout << "\n\n\t\tEnter your choice: ";
+        int menuChoice;
+        cin >> menuChoice;
+    
+    if(menuChoice > 10 || menuChoice < 0)
+    {
+        cout << "\n\t\tYou have entered an Invalid option.\n";
+        cout << "\t\tPlease choose a valid option.\n\n";
+        goto invalidOption;
+    }
+
+    // input value for calculation
+    float a, b, ans = -1;
+
+    if(menuChoice == 0)
+        goto Exit;
+
+    system("cls");
+
+    // heading of calculation part
+    printLine();
+    cout << "\t\t\t\t\tWelcome to Scientific calculator\n";
+    printLine();
+
+    // switch to redirect to calculation
+    switch (menuChoice)
+    {
+    case 1:
+        cout << "\n\tAddition: \n";
+        input(a, b, 2);
+        ans = a + b;
+        break;
+
+    case 2:
+        cout << "\n\tSubtraction: \n";
+        input(a, b, 2);
+        ans = a - b;
+        break;
+
+    case 3:
+        cout << "\n\tMultiplication: \n";
+        input(a, b, 2);
+        ans = a * b;
+        break;
+
+    case 4:
+        cout << "\n\tDivision: \n";
+        input(a, b, 2);
+        ans = a / b;
+        break;
+
+    case 5:
+        cout << "\n\tSquare root: \n";
+        input(a, b, 1);
+        ans = sqrt(a);
+        break;
+
+    case 6:
+        cout << "\n\tExponential: \n";
+        input(a, b, 2);
+        ans = pow(a, b);
+        break;
+    
+    case 7:
+        cout << "\n\tLogarithmic: \n";
+        input(a, b, 1);
+        ans = log(a);
+        break;
+
+    case 8:
+        cout << "\n\tSine: \n";
+        input(a, b, 1);
+        ans = sin(a);
+        break;
+
+    case 9:
+        cout << "\n\tCosine: \n";
+        input(a, b, 1);
+        ans = cos(a);
+        break;
+
+    case 10:
+        cout << "\n\tTangent: \n";
+        input(a, b, 1);
+        ans = tan(a);
+        break;
+    
+    /* default:
+        goto Exit;
+        break; */
+    }
+
+    // output
+    output:
+        cout << "\n\t\toutput: " << ans << endl;
+        printLine();
+    
+    cout << "\n\t\tNow, we will go back to main menu...\n";
+    system("pause");
+    system("cls");
+    goto menu;
+    
+    Exit:
+
+    // end
+    // system("pause");
+    cout << endl;
+}
