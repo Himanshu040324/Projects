@@ -1,0 +1,462 @@
+// Project 5: Registration and Login System
+
+
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+#include <time.h>
+using namespace std;
+
+void printLine()
+{
+    cout << " X";
+    for (int i = 0; i < 100; i++)
+        cout << "-";
+
+    cout << "X \n";
+}
+
+int generateCode()
+{
+    int temp;
+    int ans = 0;
+
+    srand(time(0));
+    for (int i = 0; i < 4; i++)
+    {
+        temp = rand() % 10;
+        ans = ans * 10 + temp;
+    }
+    return ans;
+}
+
+void securityON(string &s)
+{
+    int n = s.length();
+
+    for(int i = 0; i < n; i++)
+        s[i] += 60;
+}
+
+void securityOff(string &s)
+{
+    int n = s.length();
+
+    for(int i = 0; i < n; i++)
+        s[i] -= 60;
+}
+
+void transferData(string name, string mail, string password)
+{
+    // securing the password
+    securityON(password);
+
+    // create an output stream
+    ofstream write("P5.txt", ios ::app);
+
+    write << name + " " + mail + " " + password + "\n";
+
+    write.close();
+}
+
+void fetchDetails(bool &flag, string name, string &presentPass)
+{
+    // opening an input stream
+    ifstream read("P5.txt");
+
+    // string for input name
+    string str;
+
+    // find username in file
+    while (!read.eof())
+    {
+        read >> str;
+        if (str == name)
+        {
+            flag = 1;
+
+            // set present password
+            read >> str >> str;
+            
+            // turning security off on password
+            securityOff(str);
+
+            presentPass = str;
+
+            return;
+        }
+    }
+
+    flag = 0;
+    return;
+}
+
+bool fetchForgot(string &name, string &password, string &mail)
+{
+    // creating string
+    string str1, str2, str3;
+
+    // creating input stream
+    ifstream read("P5.txt");
+
+    while(!read.eof())
+    {
+        read >> str1 >> str2 >> str3;
+
+        if(str2 == mail)
+        {
+            name = str1;
+
+            // turning security off on password
+            securityOff(str3);
+
+            password = str3;
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+int myLogin()
+{
+loginStart:
+
+    // clear screen
+    system("cls");
+
+    // Login Page
+    printLine();
+    cout << "\t\t\t\t\t\tLogin\n";
+    printLine();
+
+    // creating variable for username and password
+    string userName;
+    string presentPass;
+    string inputPass;
+    bool flag;
+
+    // taking input for username
+    cout << "\t\t\tUsername: ";
+    cin >> userName;
+
+    // check username and fetch password: to check further
+    fetchDetails(flag, userName, presentPass);
+
+    if (flag == 0)
+    {
+        cout << "\t\tYou have entered an Invalid Username.\n";
+        goto loginMenu;
+    }
+
+    // taking input for password
+    cout << "\t\t\tPassword: ";
+    cin >> inputPass;
+
+    // checking password
+    if (presentPass == inputPass)
+    {
+        cout << "\n";
+        printLine();
+        cout << "\t\t\t\t\tLogin Successful....\n";
+        printLine();
+    }
+    else
+    {
+        cout << "You have entered an Invalid password.";
+        goto loginMenu;
+    }
+
+// Login menu
+loginMenu:
+
+    cout << "\n\t\tMenu: \n\t\t\t1. Loggin again \n\t\t\t2. Go back to main menu \n\t\t\t2. Exit \n\n";
+
+    // Menu Response
+    int menuRes;
+    cout << "\t\tEnter your choice: ";
+    cin >> menuRes;
+
+    switch (menuRes)
+    {
+    case 1:
+        goto loginStart;
+        break;
+
+    case 2:
+        return 2;
+        break;
+
+    case 3:
+        return 3;
+        break;
+
+    default:
+        goto loginMenu;
+    }
+}
+
+int myRegister()
+{
+registerationStart:
+
+    // clear screen
+    system("cls");
+
+    // Login Page
+    printLine();
+    cout << "\t\t\t\t\tRegistration\n";
+    printLine();
+
+    // creating variable for username and password
+    string firstName;
+    string lastName;
+    string mailId;
+    string inputPass;
+    int buildCode;
+    int inputCode;
+    bool flag;
+
+    // taking input for username
+invalidUsername:
+    cout << "\t\t\tFirst name: ";
+    cin >> firstName;
+
+    fetchDetails(flag, firstName, inputPass);
+
+    if (flag == 1)
+    {
+        cout << "\n\t\tUsername already exists.\n\t\tPlease try a different user name.\n\n";
+        goto invalidUsername;
+    }
+
+    // taking input for last name
+    cout << "\t\t\tLast name: ";
+    cin >> lastName;
+
+    // taking input for mail id
+    cout << "\t\t\tMail Id: ";
+    cin >> mailId;
+
+    // taking input for password
+    cout << "\t\t\tPassword: ";
+    cin >> inputPass;
+
+    // generate registration code and verify it
+code:
+
+    buildCode = generateCode();
+
+    cout << "\n\t\tWe have sent a verification code to your mail id.\n\t\tPlease check your mail.\n\n\t\tMail message: Your code is " << buildCode << ".\n\t\tEnter verification code: ";
+    cin >> inputCode;
+
+    if (inputCode != buildCode)
+    {
+        cout << "\t\tYou have entered an Invalid code.\n";
+        goto code;
+    }
+
+    else
+        cout << "\t\tVerification complete.\n";
+
+    transferData(firstName, mailId, inputPass);
+
+    // complete
+    printLine();
+    cout << "\t\t\t\tYour Registration has Completed\n";
+    printLine();
+
+registerationMenu:
+
+    cout << "\n\t\tMenu: \n\t\t\t1. Register again \n\t\t\t2. Back to main menu \n\t\t\t3. Exit \n\n";
+
+    // Menu Response
+    int menuRes;
+    cout << "\t\tEnter your choice: ";
+    cin >> menuRes;
+
+    switch (menuRes)
+    {
+    case 1:
+        goto registerationStart;
+        break;
+
+    case 2:
+        return 2;
+        break;
+
+    case 3:
+        return 3;
+        break;
+
+    default:
+        goto registerationMenu;
+    }
+}
+
+int myForgot()
+{
+forgotStart:
+    // clear screen
+    system("cls");
+
+    // Login Page
+    printLine();
+    cout << "\t\t\t\t\tForgot Password\n";
+    printLine();
+
+    // creating variable
+    string userName;
+    string userPass;
+    string mailId;
+    int buildCode;
+    int inputCode;
+    bool flag;
+
+    // input mail id
+    cout << "\t\t\tMail Id: ";
+    cin >> mailId;
+
+    // search mail id
+    flag = fetchForgot(userName, userPass, mailId);
+
+    if(flag == false)
+    {
+        cout << "No such mail id found.\n";
+        goto forgotMenu;
+    }
+
+    // generating code and verify it
+code:
+
+    buildCode = generateCode();
+
+    cout << "\n\t\tWe have sent a verification code to your mail id.\n\t\tPlease check your mail.\n\n\t\tMail message: Your code is " << buildCode << ".\n\t\tEnter verification code: ";
+    cin >> inputCode;
+
+    if (inputCode != buildCode)
+    {
+        cout << "\t\tYou have entered an Invalid code.\n";
+        goto code;
+    }
+
+    else
+    {
+        cout << "\t\tVerification complete.\n\n";
+
+        // printing the forgotten details
+        cout << "\t\tUser Name: " << userName << "\n\t\tUser Mail Id: " << mailId << "\n\t\tUser Password: " << userPass << endl;
+        printLine();
+    }
+
+// Menu
+forgotMenu:
+    cout << "\n\t\tMenu: \n\t\t\t1. Try again \n\t\t\t2. Back to main menu \n\t\t\t3. Exit \n\n";
+
+    // Menu Response
+    int menuRes;
+    cout << "\t\tEnter your choice: ";
+    cin >> menuRes;
+
+    switch (menuRes)
+    {
+    case 1:
+        goto forgotStart;
+        break;
+
+    case 2:
+        return 2;
+        break;
+
+    case 3:
+        return 3;
+        break;
+
+    default:
+        goto forgotMenu;
+    }
+}
+
+int main()
+{
+    cout << endl;
+    // start
+
+Start:
+
+    // Welcome
+    printLine();
+    cout << "\t\t\t\t\tWelcome to Login/Registration System\n";
+    printLine();
+
+    // Menu
+    cout << "\n\t\tMenu: \n";
+    cout << "\t\t\t1. Login \n\t\t\t2. Register (New User) \n\t\t\t3. Forgot \n\t\t\t4. Exit \n\n";
+
+    // Menu Response
+    int menuRes;
+
+invalidOption:
+    cout << "\t\tEnter your choice: ";
+    cin >> menuRes;
+
+    // Redirection to forward
+    int next;
+    switch (menuRes)
+    {
+    case 1:
+        next = myLogin();
+
+        if (next == 2)
+        {
+            system("cls");
+            goto Start;
+        }
+        else
+            goto Exit;
+
+        break;
+
+    case 2:
+        next = myRegister();
+
+        if (next == 2)
+        {
+            system("cls");
+            goto Start;
+        }
+        else
+            goto Exit;
+
+        break;
+
+    case 3:
+        next = myForgot();
+
+        if (next == 2)
+        {
+            system("cls");
+            goto Start;
+        }
+        else
+            goto Exit;
+
+        break;
+
+    case 4:
+        goto Exit;
+        break;
+
+    default:
+        cout << "\n\t\tYou have entered an Invalid option.\n";
+        cout << "\t\tPlease choose a valid option.\n\n";
+        goto invalidOption;
+        break;
+    }
+
+Exit:
+
+    // end
+    cout << endl;
+}
